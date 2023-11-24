@@ -1,9 +1,8 @@
-using BlazorWasmAppCookieAuth.Client;
 using BlazorWasmAppCookieAuth.Client.Handlers;
 using BlazorWasmAppCookieAuth.Client.Providers;
+using BlazorWasmAppCookieAuth.Client.Services;
+using BlazorWasmAppCookieAuth.Client.ViewModels;
 using Microsoft.AspNetCore.Components.Authorization;
-using Microsoft.AspNetCore.Components.Web;
-using Microsoft.AspNetCore.Components.WebAssembly.Authentication;
 using Microsoft.AspNetCore.Components.WebAssembly.Hosting;
 
 namespace BlazorWasmAppCookieAuth.Client
@@ -16,11 +15,17 @@ namespace BlazorWasmAppCookieAuth.Client
             //builder.RootComponents.Add<App>("#app");
             //builder.RootComponents.Add<HeadOutlet>("head::after");
 
-            builder.Services.AddScoped(sp => new HttpClient { BaseAddress = new Uri(builder.HostEnvironment.BaseAddress) });
+            builder.Services.AddScoped(sp => new HttpClient { BaseAddress = new Uri("https://localhost:7182/api/") });
+            
+            builder.Services.AddScoped<IEmployeeService, EmployeeService>();
+            builder.Services.AddScoped<IDepartmentService, DepartmentService>();
+
             builder.Services.AddScoped<AuthenticationStateProvider, CustomAuthStateProvider>();
             builder.Services.AddScoped<CookieHandler>();
+            builder.Services.AddAutoMapper(typeof(EmployeeProfile));
 
-            builder.Services.AddHttpClient("BlazorWasmAppCookieAuth.ServerAPI", client => client.BaseAddress = new Uri(builder.HostEnvironment.BaseAddress))
+            builder.Services.AddHttpClient("BlazorWasmAppCookieAuth.ServerAPI", 
+                client => client.BaseAddress = new Uri(builder.HostEnvironment.BaseAddress))
                .AddHttpMessageHandler<CookieHandler>();
 
             builder.Services.AddOptions();

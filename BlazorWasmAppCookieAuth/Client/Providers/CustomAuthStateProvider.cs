@@ -31,17 +31,18 @@ namespace BlazorWasmAppCookieAuth.Client.Providers
                     }, "AuthCookie");
 
                     claimsPrincipal = new ClaimsPrincipal(identity);
-                    //NotifyAuthenticationStateChanged(GetAuthenticationStateAsync());
+
+                    NotifyAuthenticationStateChanged(GetAuthenticationStateAsync());
                 }
             }
             return new AuthenticationState(claimsPrincipal);
         }
         
-        public void SignOut()
+        public async Task SignOut()
         {
             _userProfileDto = null;
             claimsPrincipal = new ClaimsPrincipal(new ClaimsIdentity());
-            NotifyAuthenticationStateChanged(GetAuthenticationStateAsync());
+            NotifyAuthenticationStateChanged(Task.FromResult(new AuthenticationState(new ClaimsPrincipal())));
         }
     }
 }

@@ -1,10 +1,13 @@
+using BlazorWasmAppCookieAuth.Server.Data;
 using BlazorWasmAppCookieAuth.Client.Handlers;
 using BlazorWasmAppCookieAuth.Client.Providers;
-using BlazorWasmAppCookieAuth.Server.Data;
 using BlazorWasmAppCookieAuth.Server.Models;
 using Microsoft.AspNetCore.Components.Authorization;
 using Microsoft.AspNetCore.ResponseCompression;
 using Microsoft.EntityFrameworkCore;
+using BlazorWasmAppCookieAuth.Client.Services;
+using BlazorWasmAppCookieAuth.Client.ViewModels;
+using Microsoft.AspNetCore.Identity;
 
 namespace BlazorWasmAppCookieAuth
 {
@@ -22,6 +25,9 @@ namespace BlazorWasmAppCookieAuth
             builder.Services.AddDefaultIdentity<ApplicationUser>(options => options.SignIn.RequireConfirmedAccount = true)
                 .AddEntityFrameworkStores<ApplicationDbContext>();
 
+            builder.Services.AddDbContext<AppDbContext>(options =>
+                options.UseSqlServer(builder.Configuration.GetConnectionString("DBConnection")));
+
             builder.Services.ConfigureApplicationCookie(options =>
             {
                 options.Events.OnRedirectToLogin = context =>
@@ -32,11 +38,19 @@ namespace BlazorWasmAppCookieAuth
                 };
             });
 
-            builder.Services.AddScoped(sp => new HttpClient { BaseAddress = new Uri("https://localhost:7182") });
+            builder.Services.AddScoped(sp => new HttpClient { BaseAddress = new Uri("https://localhost:7182/api/") });
             builder.Services.AddScoped<AuthenticationStateProvider, CustomAuthStateProvider>();
             builder.Services.AddScoped<CookieHandler>();
 
-            builder.Services.AddHttpClient("BlazorWasmAppCookieAuth.ServerAPI", client => client.BaseAddress = new Uri("https://localhost:7182"))
+            builder.Services.AddScoped<IDepartmentRepository, DepartmentRepository>();
+            builder.Services.AddScoped<IEmployeeRepository, EmployeeRepository>();
+
+            builder.Services.AddAutoMapper(typeof(EmployeeProfile));
+            builder.Services.AddScoped<IEmployeeService, EmployeeService>();
+            builder.Services.AddScoped<IDepartmentService, DepartmentService>();
+
+            builder.Services.AddHttpClient("BlazorWasmAppCookieAuth.ServerAPI", 
+                client => client.BaseAddress = new Uri("https://localhost:7182"))
                .AddHttpMessageHandler<CookieHandler>();
 
             builder.Services.AddControllersWithViews();
@@ -63,6 +77,7 @@ namespace BlazorWasmAppCookieAuth
 
             app.UseRouting();
 
+            app.UseAuthentication();
             app.UseAuthorization();
 
             app.MapRazorPages();

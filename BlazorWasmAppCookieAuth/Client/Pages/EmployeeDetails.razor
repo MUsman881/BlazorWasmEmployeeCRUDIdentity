@@ -1,0 +1,57 @@
+﻿@page "/employeedetails/{id}"
+@inherits EmployeeDetailsBase
+
+
+@if (Employee is null)
+{
+    <div class="spinner"></div>
+}
+else
+{
+
+<div class="row justify-content-center">
+    <div class="col-md-7 col-lg-4 mb-5 mb-lg-0 wow fadeIn">
+        <div class="card border-0 shadow">
+            <img src="@Employee.PhotoPath" class="card-img-top img-Thumbnail" alt="@Employee.PhotoPath">
+            <div class="card-body p-1-9 p-xl-5">
+                <div class="mb-4">
+                    <h3 class="h4 mb-0">@Employee.FirstName @Employee.LastName</h3>
+                        <span class="text-primary">@(Employee.Department == null ? "N/A" : Employee.Department.DepartmentName)</span>
+                </div>
+                <ul class="list-unstyled mb-4">
+                    <li class="mb-3"><a href="#!"><i class="oi oi-envelope-closed display-25 me-3 text-secondary"></i>@Employee.Email</a></li>
+                    <li class="mb-3"><a href="#!"><i class="oi oi-phone display-25 me-3 text-secondary"></i>+012 (345) 6789</a></li>
+                    <li><a href="#!"><i class="oi oi-calendar display-25 me-3 text-secondary"></i>@Employee.DateOfBirth</a></li>
+                </ul>
+                <ul class="social-icon-style2 ps-0">
+                    <li><a href="#!" class="rounded-3"><i class="fab fa-facebook-f"></i></a></li>
+                    <li><a href="#!" class="rounded-3"><i class="fab fa-twitter"></i></a></li>
+                    <li><a href="#!" class="rounded-3"><i class="fab fa-youtube"></i></a></li>
+                    <li><a href="#!" class="rounded-3"><i class="fab fa-linkedin-in"></i></a></li>
+                </ul>   
+            </div>
+        </div>
+    </div>
+    <div class="col-lg-8">
+        <div class="ps-lg-1-6 ps-xl-5">
+            <div class="mb-5 wow fadeIn">
+                <div class="text-start mb-1-6 wow fadeIn">
+                    <h2 class="h1 mb-0 text-primary">#About Me</h2>
+                </div>
+                <p>It is a long established fact that a reader will be distracted by the readable content of a page when looking at its layout. The point of using Lorem Ipsum is that it has a more-or-less normal distribution of letters, as opposed to using 'Content here, content here', making it look like readable English. Many desktop publishing packages and web page editors now use Lorem Ipsum as their default model text, and a search for 'lorem ipsum' will uncover many web sites still in their infancy.</p>
+                <p class="mb-0">There are many variations of passages of Lorem Ipsum available, but the majority have suffered alteration in some form, by injected humour, or randomised words which don't look even slightly believable. If you are going to use a passage of Lorem Ipsum, you need to be sure there isn't anything embarrassing hidden in the middle of text.</p>
+            </div>
+            @*<button class="btn btn-primary" @onclick="@ButtonClick">@ButtonText</button>*@
+        </div>
+        @*<div class="card-footer text-center @CssClass">
+            <a href="/Employee" class="btn btn-primary m-1">Back</a>
+
+            <a href="" class="btn btn-primary m-1">Edit</a>
+
+            <a href="" class="btn btn-danger m-1">Delete</a>
+        </div>*@
+    </div>
+</div>
+
+
+}

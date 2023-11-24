@@ -10,7 +10,7 @@
     protected override void OnAfterRender(bool firstRender)
     {
         base.OnAfterRender(firstRender);
-
-        Navigation.NavigateTo("Identity/Account/Login", true);
+        var returnUrl = Navigation.Uri.Replace(Navigation.BaseUri, "/");
+        Navigation.NavigateTo($"Identity/Account/Login?returnUrl={returnUrl}", true);
     }
 }
